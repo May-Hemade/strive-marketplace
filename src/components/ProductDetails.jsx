@@ -20,7 +20,7 @@ export default function ProductDetails() {
     setLoading(true)
     try {
       const response = await fetch(
-        `http://localhost:3001/products/${productId}`,
+        `https://may-marketplace.herokuapp.com/products/${productId}`,
         {
           method: "GET",
         }
@@ -44,7 +44,7 @@ export default function ProductDetails() {
     setReviewsLoading(true)
     try {
       const response = await fetch(
-        `http://localhost:3001/products/${productId}/reviews`,
+        `https://may-marketplace.herokuapp.com/products/${productId}/reviews`,
         {
           method: "GET",
         }
@@ -65,7 +65,6 @@ export default function ProductDetails() {
   }
 
   useEffect(() => {
-    console.log("hi")
     getProduct()
     getReviews()
   }, [])
@@ -80,9 +79,8 @@ export default function ProductDetails() {
               <img src={product.imageUrl} />
             </Col>
             <Col>
-              {" "}
               <h3> Description </h3>
-              <div> {product.description}</div>
+              <div> {product.productDescription}</div>
             </Col>
           </Row>
         )}
@@ -118,7 +116,7 @@ export default function ProductDetails() {
           <div className="mt-3">
             <h5>Reviews</h5>
             {reviews.map((review) => (
-              <Review key={review._id} review={review} />
+              <Review key={review.reviewId} review={review} />
             ))}
           </div>
         )}

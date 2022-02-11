@@ -10,14 +10,15 @@ export default function Home() {
   const getProducts = async () => {
     setLoading(true)
     try {
-      const response = await fetch("http://localhost:3001/products", {
+      const response = await fetch("https://may-marketplace.herokuapp.com/products", {
         method: "GET",
       })
 
       setLoading(false)
 
       if (response.ok) {
-        setProducts(await response.json())
+        let result = await response.json()
+        setProducts(result.data)
         setError(false)
       } else {
         setError(true)
