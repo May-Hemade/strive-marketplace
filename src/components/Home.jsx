@@ -10,7 +10,7 @@ export default function Home() {
   const getProducts = async () => {
     setLoading(true)
     try {
-      const response = await fetch("https://marketplace-mongo.herokuapp.com/products", {
+      const response = await fetch("https://marketplace-mongo.herokuapp.com/products?limit=10", {
         method: "GET",
       })
 
