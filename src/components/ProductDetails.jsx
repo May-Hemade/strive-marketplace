@@ -10,17 +10,13 @@ export default function ProductDetails() {
   const [isLoading, setLoading] = useState(false)
   const [hasError, setError] = useState(false)
 
-  const [reviews, setReviews] = useState([])
-  const [reviewsLoading, setReviewsLoading] = useState(false)
-  const [reviewsError, setReviewsError] = useState(false)
-
   const [rating, setRating] = useState(0)
 
   const getProduct = async () => {
     setLoading(true)
     try {
       const response = await fetch(
-        `https://may-marketplace.herokuapp.com/products/${productId}`,
+        `https://marketplace-mongo.herokuapp.com/products/${productId}`,
         {
           method: "GET",
         }
@@ -40,87 +36,60 @@ export default function ProductDetails() {
     }
   }
 
-  const getReviews = async () => {
-    setReviewsLoading(true)
-    try {
-      const response = await fetch(
-        `https://may-marketplace.herokuapp.com/products/${productId}/reviews`,
-        {
-          method: "GET",
-        }
-      )
-
-      setReviewsLoading(false)
-
-      if (response.ok) {
-        setReviews(await response.json())
-        setReviewsError(false)
-      } else {
-        setReviewsError(true)
-      }
-    } catch (e) {
-      setReviewsLoading(false)
-      setReviewsError(true)
-    }
-  }
-
   useEffect(() => {
     getProduct()
-    getReviews()
   }, [])
 
   return (
     <div>
-      <Container className="p-3 text-left">
-        {!isLoading && !hasError && product && (
+      {!isLoading && !hasError && product && (
+        <Container className="p-3 text-left">
           <Row>
             <Col md={6} className="p-2">
               <h2>{product.name}</h2>
-              <img src={product.imageUrl} />
+              <img src={product.image} className="w-100"/>
             </Col>
             <Col>
               <h3> Description </h3>
-              <div> {product.productDescription}</div>
+              <div> {product.description}</div>
             </Col>
           </Row>
-        )}
+          <Row className="mt-3 text-left">
+            <Col md={6}>
+              <h4 className="mb-3">Write a Review</h4>
+              <StarRatings
+                numberOfStars={5}
+                rating={rating}
+                changeRating={setRating}
+                starDimension="25px"
+                starSpacing="5px"
+                starHoverColor="#ffd700"
+                starRatedColor="#ffd700"
+                starEmptyColor="grey"
+              />
+              <Form className="mt-3">
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlTextarea1"
+                >
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    placeholder="Write your comments..."
+                  />
+                </Form.Group>
+              </Form>
+            </Col>
+          </Row>
 
-        <Row className="mt-3 text-left">
-          <Col md={6}>
-            <h4 className="mb-3">Write a Review</h4>
-            <StarRatings
-              numberOfStars={5}
-              rating={rating}
-              changeRating={setRating}
-              starDimension="25px"
-              starSpacing="5px"
-              starHoverColor="#ffd700"
-              starRatedColor="#ffd700"
-              starEmptyColor="grey"
-            />
-            <Form className="mt-3">
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlTextarea1"
-              >
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="Write your comments..."
-                />
-              </Form.Group>
-            </Form>
-          </Col>
-        </Row>
-        {!reviewsLoading && !reviewsError && reviews && (
           <div className="mt-3">
             <h5>Reviews</h5>
-            {reviews.map((review) => (
-              <Review key={review.reviewId} review={review} />
+            {product.reviews.map((review) => (
+              <Review key={review._id} review={review} />
             ))}
           </div>
-        )}
-      </Container>
+        </Container>
+      )}
     </div>
   )
 }

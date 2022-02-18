@@ -10,7 +10,7 @@ export default function Home() {
   const getProducts = async () => {
     setLoading(true)
     try {
-      const response = await fetch("https://may-marketplace.herokuapp.com/products", {
+      const response = await fetch("https://marketplace-mongo.herokuapp.com/products", {
         method: "GET",
       })
 
@@ -18,7 +18,7 @@ export default function Home() {
 
       if (response.ok) {
         let result = await response.json()
-        setProducts(result.data)
+        setProducts(result.products)
         setError(false)
       } else {
         setError(true)
